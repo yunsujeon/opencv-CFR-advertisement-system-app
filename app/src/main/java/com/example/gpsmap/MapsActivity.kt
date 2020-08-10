@@ -2,29 +2,40 @@ package com.example.gpsmap
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
+import android.view.View
 import android.view.WindowManager
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.BitmapDescriptorFactory.*
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.noButton
 import org.jetbrains.anko.toast
 import org.jetbrains.anko.yesButton
+
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private val REQUEST_ACCESS_FINE_LOCATION = 1000
@@ -55,8 +66,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         locationRequest = LocationRequest()
 
         locationRequest.priority=LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationRequest.interval = 10000
-        locationRequest.fastestInterval = 5000
+        locationRequest.interval = 3600000 //한시간단위로 내 위치를 자동으로 갱신한다.
+        locationRequest.fastestInterval = 3600000
     }
 
     /**
@@ -70,13 +81,104 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
      호출됩니다.
      */
     override fun onMapReady(googleMap: GoogleMap) {
+
+
+
         mMap = googleMap //지도가 준비되면 googlemap 객체를 얻습니다.
 
-        // 위도와 경도로 시드니의 위치를 정하고 구글 지도 객체에 마커를 추가하고 카메라를 이동합니다.
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        val mju = LatLng(37.221873, 127.186694)
+        mMap.addMarker(MarkerOptions().position(mju)
+            .title("명지대학교")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_RED))
+            .snippet("인구:3천 나이분포:30대 초당가격:10000 "))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju))
+
+        val mju1 = LatLng(37.226972, 127.193256) //명지로 157번길 자취방들
+        mMap.addMarker(MarkerOptions().position(mju1)
+            .title("명지로 157번길")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_YELLOW))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju1))
+
+        val mju2 = LatLng(37.226649, 127.197487) //명지로 209번길 자취방들
+        mMap.addMarker(MarkerOptions().position(mju2)
+            .title("명지로 209번길")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_YELLOW))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju2))
+
+        val mju3 = LatLng(37.229973, 127.189003) //명지대 내려가는길
+        mMap.addMarker(MarkerOptions().position(mju3)
+            .title("명지로 55번길")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_BLUE))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju3))
+
+        val mju4 = LatLng(37.228749, 127.186385) //명지로 자취방들
+        mMap.addMarker(MarkerOptions().position(mju4)
+            .title("명지로 자취방1")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_YELLOW))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju4))
+
+        val mju5 = LatLng(37.231286, 127.187308) //명지로 자취방들
+        mMap.addMarker(MarkerOptions().position(mju5)
+            .title("명지로 자취방2")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_YELLOW))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju5))
+
+        val mju6 = LatLng(37.230167, 127.184411) //골드클래스 용인 역북아파트
+        mMap.addMarker(MarkerOptions().position(mju6)
+            .title("골드클래스 용인 아파트")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_RED))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju6))
+
+        val mju7 = LatLng(37.231107, 127.182598) //역북지웰푸르지오아파트
+        mMap.addMarker(MarkerOptions().position(mju7)
+            .title("역북지웰푸르지오 아파트")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_RED))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju7))
+
+        val mju8 = LatLng(37.233763, 127.185580) //우미린 센트럴파크 아파트
+        mMap.addMarker(MarkerOptions().position(mju8)
+            .title("우미린 센트럴파크 아파트")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_RED))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju8))
+
+        val mju9 = LatLng(37.235608, 127.187061) //동원로얄듀크
+        mMap.addMarker(MarkerOptions().position(mju9)
+            .title("동원로얄듀크 아파트")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_RED))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju9))
+
+        val mju10 = LatLng(37.233362, 127.187930) //역북 상가
+        mMap.addMarker(MarkerOptions().position(mju10)
+            .title("역북 상가")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_RED))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju10))
+
+        val mju11 = LatLng(37.235071, 127.190377) //신성아파트
+        mMap.addMarker(MarkerOptions().position(mju11)
+            .title("역북마을 신성아파트")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_RED))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju11))
+
+        val mju12 = LatLng(37.233525, 127.189486) //구 상가
+        mMap.addMarker(MarkerOptions().position(mju12)
+            .title("구 상가지구")
+            .icon(BitmapDescriptorFactory.defaultMarker(HUE_YELLOW))
+            .snippet(""))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(mju12))
     }
+
+
 //focus 를 얻었을 때 불리는게 on Resume
     override fun onResume(){
         super.onResume()
